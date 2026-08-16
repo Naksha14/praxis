@@ -1,16 +1,23 @@
-import "./globals.css";
 import type { Metadata } from "next";
-import Providers from "./providers";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { Providers } from "./providers";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Praxis — Project Control",
-  description: "Site-ops and project management system.",
+  title: "Praxis PMS",
+  description: "Project Management System",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
-      <body className="font-body">
+      <body className={inter.className}>
         <Providers>{children}</Providers>
       </body>
     </html>
