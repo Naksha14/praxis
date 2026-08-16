@@ -37,7 +37,6 @@ export async function GET() {
       code: p.code,
       title: p.title,
       inChargeName: p.inCharge.name,
-      status: p.status,
       ...summary,
     };
   });
