@@ -1,0 +1,208 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  PROJECT_INCHARGE
+}
+
+model User {
+  id           String   @id @default(cuid())
+  loginId      String   @unique
+  passwordHash String
+  name         String
+  role         Role
+  createdAt    DateTime @default(now())
+
+  projects          Project[]        @relation("InCharge")
+  documents         Document[]
+  media             Media[]
+  revenues          Revenue[]
+  expenditures      Expenditure[]
+  labourCharges     LabourCharge[]
+  materialCharges   MaterialCharge[]
+  transportCharges  TransportCharge[]
+  extraCharges      ExtraCharge[]
+  paymentsRecorded  ProjectPayment[]
+  paymentHistory    PaymentHistoryEntry[]
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  title       String
+  client      String
+  date        DateTime
+  status      String   @default("active") // active | completed
+  inChargeId  String
+  inCharge    User     @relation("InCharge", fields: [inChargeId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  documents         Document[]
+  media             Media[]
+  revenues          Revenue[]
+  expenditures      Expenditure[]
+  labourCharges     LabourCharge[]
+  materialCharges   MaterialCharge[]
+  transportCharges  TransportCharge[]
+  extraCharges      ExtraCharge[]
+  payment           ProjectPayment?
+  paymentHistory    PaymentHistoryEntry[]
+
+  @@index([inChargeId])
+}
+
+// The Admin-entered "Amount Paid to Project In-Charge" — a single editable
+// value per project, deliberately separate from Expenditure/Charges below.
+// It is NEVER derived from or overwritten by expense totals (see lib/shared.ts
+// computeExpenseSummary), and only an ADMIN may create/edit/delete it —
+// enforced in app/api/projects/[id]/payment/route.ts, not just hidden in the UI.
+model ProjectPayment {
+  id          String   @id @default(cuid())
+  projectId   String   @unique
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  amount      Decimal  @db.Decimal(14, 2)
+  recordedById String
+  recordedBy  User     @relation(fields: [recordedById], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Append-only audit trail for the admin-paid amount (add/edit/delete),
+// per the financial-accountability requirement. Never edited or deleted itself.
+model PaymentHistoryEntry {
+  id              String   @id @default(cuid())
+  projectId       String
+  project         Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  action          String   // added | edited | deleted
+  previousAmount  Decimal? @db.Decimal(14, 2)
+  newAmount       Decimal? @db.Decimal(14, 2)
+  performedById   String
+  performedBy     User     @relation(fields: [performedById], references: [id])
+  createdAt       DateTime @default(now())
+
+  @@index([projectId])
+}
+
+model Document {
+  id           String   @id @default(cuid())
+  projectId    String
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name         String
+  docType      String   // Drawing | Progress Document | Report | Other
+  fileKey      String   // object storage key
+  mimeType     String
+  size         Int
+  uploadedById String
+  uploadedBy   User     @relation(fields: [uploadedById], references: [id])
+  createdAt    DateTime @default(now())
+
+  @@index([projectId])
+}
+
+model Media {
+  id           String   @id @default(cuid())
+  projectId    String
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name         String
+  kind         String   // photo | video
+  fileKey      String
+  mimeType     String
+  size         Int
+  uploadedById String
+  uploadedBy   User     @relation(fields: [uploadedById], references: [id])
+  createdAt    DateTime @default(now())
+
+  @@index([projectId])
+}
+
+model Revenue {
+  id          String   @id @default(cuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  date        DateTime
+  description String
+  amount      Decimal  @db.Decimal(14, 2)
+  addedById   String
+  addedBy     User     @relation(fields: [addedById], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@index([projectId])
+}
+
+model Expenditure {
+  id          String   @id @default(cuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  date        DateTime
+  description String
+  amount      Decimal  @db.Decimal(14, 2)
+  addedById   String
+  addedBy     User     @relation(fields: [addedById], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@index([projectId])
+}
+
+model LabourCharge {
+  id          String   @id @default(cuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  date        DateTime
+  description String
+  amount      Decimal  @db.Decimal(14, 2)
+  addedById   String
+  addedBy     User     @relation(fields: [addedById], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@index([projectId])
+}
+
+model MaterialCharge {
+  id          String   @id @default(cuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  date        DateTime
+  description String
+  amount      Decimal  @db.Decimal(14, 2)
+  addedById   String
+  addedBy     User     @relation(fields: [addedById], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@index([projectId])
+}
+
+model TransportCharge {
+  id          String   @id @default(cuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  date        DateTime
+  description String
+  amount      Decimal  @db.Decimal(14, 2)
+  addedById   String
+  addedBy     User     @relation(fields: [addedById], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@index([projectId])
+}
+
+model ExtraCharge {
+  id          String   @id @default(cuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  date        DateTime
+  description String
+  amount      Decimal  @db.Decimal(14, 2)
+  addedById   String
+  addedBy     User     @relation(fields: [addedById], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@index([projectId])
+}
