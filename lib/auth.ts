@@ -1,3 +1,5 @@
+// Add this line at the very top, before the imports
+console.log("🔍 Checking DATABASE_URL:", process.env.DATABASE_URL ? "✅ Set" : "❌ MISSING");
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
@@ -14,24 +16,45 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.loginId || !credentials?.password) return null;
+        try {
+          console.log("🔍 Login attempt for:", credentials?.loginId);
+          
+          if (!credentials?.loginId || !credentials?.password) {
+            console.log("❌ Missing credentials");
+            return null;
+          }
 
-        // Never log credentials. Look up by loginId only; password is
-        // compared against the stored bcrypt hash, never in plaintext.
-        const user = await prisma.user.findUnique({
-          where: { loginId: credentials.loginId },
-        });
-        if (!user) return null;
+          console.log("🔍 Looking up user in database...");
+          const user = await prisma.user.findUnique({
+            where: { loginId: credentials.loginId },
+          });
+          
+          if (!user) {
+            console.log("❌ User not found:", credentials.loginId);
+            return null;
+          }
 
-        const valid = await bcrypt.compare(credentials.password, user.passwordHash);
-        if (!valid) return null;
+          console.log("✅ User found:", user.loginId);
+          console.log("🔍 Comparing password...");
+          
+          const valid = await bcrypt.compare(credentials.password, user.passwordHash);
+          
+          if (!valid) {
+            console.log("❌ Invalid password for:", credentials.loginId);
+            return null;
+          }
 
-        return {
-          id: user.id,
-          loginId: user.loginId,
-          name: user.name,
-          role: user.role,
-        } as any;
+          console.log("✅ Login successful for:", credentials.loginId);
+          return {
+            id: user.id,
+            loginId: user.loginId,
+            name: user.name,
+            role: user.role,
+          } as any;
+        } catch (error) {
+          console.log("❌ Login error:", error);
+          return null;
+        }
       },
     }),
   ],
