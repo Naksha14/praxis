@@ -59,7 +59,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
   if (!project) {
     return (
       <div className="rounded-xl border border-line bg-white p-8 text-center">
-        <p className="mb-3 text-sm text-steel">This project couldn"'"t be loaded — it may not exist, or you may not have access to it.</p>
+        <p className="mb-3 text-sm text-steel">This project couldn't be loaded — it may not exist, or you may not have access to it.</p>
         <button onClick={load} className="rounded-md border border-line px-4 py-2 text-sm font-semibold hover:bg-paper">Try again</button>
       </div>
     );
@@ -156,6 +156,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
     setBusy(true);
     try {
       console.log("📸 Uploading media:", file.name, file.size, file.type, kind);
+      
       const urlRes = await fetch("/api/upload-url", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -167,18 +168,39 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
           kind: kind
         }),
       });
+      
       const urlBody = await urlRes.json();
-      if (!urlRes.ok) { toast(urlBody.error || "Upload rejected.", "error"); return; }
+      if (!urlRes.ok) {
+        toast(urlBody.error || "Upload rejected.", "error");
+        return;
+      }
 
-      const { error: uploadErr } = await supabaseBrowser.storage.from(STORAGE_BUCKET).uploadToSignedUrl(urlBody.fileKey, urlBody.token, file);
-      if (uploadErr) { toast(`Upload failed: ${uploadErr.message}`, "error"); return; }
+      const { error: uploadErr } = await supabaseBrowser.storage
+        .from(STORAGE_BUCKET)
+        .uploadToSignedUrl(urlBody.fileKey, urlBody.token, file);
+        
+      if (uploadErr) {
+        toast(`Upload failed: ${uploadErr.message}`, "error");
+        return;
+      }
 
       const metaRes = await fetch(`/api/projects/${params.id}/media`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: file.name, kind, fileKey: urlBody.fileKey, mimeType: file.type, size: file.size }),
+        body: JSON.stringify({
+          name: file.name,
+          kind: kind,
+          fileKey: urlBody.fileKey,
+          mimeType: file.type,
+          size: file.size
+        }),
       });
-      if (!metaRes.ok) { toast("Upload succeeded but saving the record failed.", "error"); return; }
+      
+      if (!metaRes.ok) {
+        toast("Upload succeeded but saving the record failed.", "error");
+        return;
+      }
+      
       toast(`${kind === "photo" ? "Photo" : "Video"} uploaded.`, "success");
       setMediaModal(null);
       load();

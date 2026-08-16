@@ -1,5 +1,5 @@
+# Praxis — Project Management System
 
-<<<<<<< HEAD
 Full-stack app: **Next.js 14 (App Router) + Prisma + PostgreSQL + NextAuth + Supabase Storage.**
 
 ## 1. What's implemented
@@ -114,5 +114,3 @@ If you still get errors after this, they're most likely one of: (a) `DATABASE_UR
 - No forgot-password flow for a user who is locked out entirely (self-service change while logged in is implemented — see `/dashboard/settings` and `PATCH /api/account/password`); a locked-out user needs an admin to reset their row directly via `prisma studio` or a short script using `bcrypt.hash`.
 - Video preview in the lightbox assumes the browser can play the uploaded container/codec directly from the presigned URL — that's true for standard `mp4`/`webm` but not for all formats.
 - The in-charge directory (`/dashboard/incharges`) is read-only in the UI; `POST /api/users` exists to create new in-charge accounts but isn't wired to a form yet — call it directly or add a small "+ New In-Charge" modal following the `ProjectFormModal` pattern.
-=======
->>>>>>> c2002369899dafa196797a1b7a011c55e3887901

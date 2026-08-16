@@ -1,10 +1,12 @@
-export const dynamic = 'force-dynamic';
-
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSessionUser, canAccessProject } from "@/lib/permissions";
 import { getDownloadUrl } from "@/lib/storage";
 
+// GET /api/download-url?kind=document|media&id=...
+// Verifies the caller has access to the parent project before ever
+// minting a signed URL, so a guessed file id can't be used to exfiltrate
+// another project's files.
 export async function GET(req: NextRequest) {
   const user = await getSessionUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

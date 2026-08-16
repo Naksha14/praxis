@@ -1,53 +1,60 @@
 "use client";
-export const dynamic = 'force-dynamic';
-
 import { useEffect, useState } from "react";
-import { Image as ImageIcon, Film, Upload } from "lucide-react";
-import { EmptyState } from "@/components/ui";
+import Link from "next/link";
+import { Image as ImageIcon, Film } from "lucide-react";
+import { EmptyState, Modal, useToast } from "@/components/ui";
 
 export default function MediaPage() {
-  const [media, setMedia] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [rows, setRows] = useState<any[] | null>(null);
+  const [lightbox, setLightbox] = useState<any>(null);
+  const toast = useToast();
 
   useEffect(() => {
     fetch("/api/media")
-      .then((res) => res.json())
-      .then((data) => {
-        setMedia(data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then(setRows)
+      .catch(() => { setRows([]); toast("Could not load media. Please refresh the page.", "error"); });
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <p>Loading...</p>
-      </div>
-    );
+  async function open(m: any) {
+    const res = await fetch(`/api/download-url?kind=media&id=${m.id}`);
+    const body = await res.json();
+    if (!res.ok) { toast(body.error || "Could not open file.", "error"); return; }
+    setLightbox({ url: body.url, name: m.name, kind: m.kind });
   }
 
   return (
     <div>
       <div className="mb-5">
         <h1 className="font-display text-[22px] font-bold">Media</h1>
-        <p className="mt-1 text-[13.5px] text-steel">Photos and videos across all projects.</p>
+        <p className="mt-1 text-[13.5px] text-steel">Every photo and video across all visible projects.</p>
       </div>
-      {media.length === 0 ? (
-        <EmptyState icon={Upload} title="No media found" subtitle="Upload photos and videos from project pages." />
+
+      {rows === null ? (
+        <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-5">{[1, 2, 3, 4, 5].map((i) => <div key={i} className="h-[140px] animate-pulse rounded-xl bg-line/40" />)}</div>
+      ) : rows.length === 0 ? (
+        <EmptyState icon={ImageIcon} title="No media yet." subtitle="Photos and videos uploaded across all projects will appear here." />
       ) : (
-        <div className="grid grid-cols-3 gap-4">
-          {media.map((item: any) => (
-            <div key={item.id} className="border rounded-lg p-3">
-              {item.kind === "photo" ? (
-                <ImageIcon className="w-8 h-8 text-blue-500" />
-              ) : (
-                <Film className="w-8 h-8 text-red-500" />
-              )}
-              <p className="text-sm truncate mt-2">{item.name}</p>
+        <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-5">
+          {rows.map((m) => (
+            <div key={m.id} className="overflow-hidden rounded-xl border border-line bg-white">
+              <div onClick={() => open(m)} className="flex h-[100px] cursor-pointer items-center justify-center bg-paper">
+                {m.kind === "video" ? <Film size={22} className="text-steellight" /> : <ImageIcon size={22} className="text-steellight" />}
+              </div>
+              <div className="p-2.5">
+                <div className="truncate text-xs font-semibold">{m.name}</div>
+                <Link href={`/dashboard/projects/${m.project.id}`} className="text-[10.5px] text-steel hover:text-blueprint hover:underline">{m.project.title}</Link>
+              </div>
             </div>
           ))}
         </div>
+      )}
+
+      {lightbox && (
+        <Modal title={lightbox.name} onClose={() => setLightbox(null)} width={700}>
+          {lightbox.kind === "photo" && <img src={lightbox.url} alt={lightbox.name} className="w-full rounded-lg" />}
+          {lightbox.kind === "video" && <video src={lightbox.url} controls className="w-full rounded-lg" />}
+        </Modal>
       )}
     </div>
   );

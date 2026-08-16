@@ -1,6 +1,4 @@
 "use client";
-export const dynamic = 'force-dynamic';
-
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -41,11 +39,11 @@ export default function LoginPage() {
             Every project,<br />one set of drawings.
           </h1>
           <p className="max-w-[400px] text-[15px] leading-relaxed text-steellight">
-            Track documents, media, revenue and site charges across every project Ã¢â‚¬â€ with admins and in-charges seeing exactly what they need to.
+            Track documents, media, revenue and site charges across every project — with admins and in-charges seeing exactly what they need to.
           </p>
         </div>
         <div className="flex gap-7 font-mono text-[12.5px] text-[#7C8798]">
-          <span>ROLE-BASED ACCESS</span><span>Ã‚Â·</span><span>LIVE LEDGERS</span><span>Ã‚Â·</span><span>SITE DOCS</span>
+          <span>ROLE-BASED ACCESS</span><span>·</span><span>LIVE LEDGERS</span><span>·</span><span>SITE DOCS</span>
         </div>
       </div>
 
@@ -68,7 +66,7 @@ export default function LoginPage() {
             <input
               type="password"
               className="w-full rounded-md border border-line bg-white py-2.5 pl-9 pr-3 text-sm outline-none focus:border-blueprint focus:ring-2 focus:ring-blueprint/20"
-              value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢"
+              value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••"
               onKeyDown={(e) => e.key === "Enter" && handleLogin()} />
           </div>
 
@@ -83,6 +81,12 @@ export default function LoginPage() {
             onClick={handleLogin} disabled={busy}>
             {busy && <Loader2 size={16} className="animate-spin" />} Sign in
           </button>
+
+          <div className="mt-6 rounded-md bg-paper p-3.5 text-[12.5px] leading-relaxed text-steel">
+            <div className="mb-1 font-semibold text-ink">Demo credentials (change after first login)</div>
+            <div className="font-mono">Admin — Praxis2026 / Praxis@482</div>
+            <div className="font-mono">In-Charge — Praxis123 / Praxis@2026</div>
+          </div>
         </div>
       </div>
     </div>

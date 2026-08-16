@@ -1,6 +1,3 @@
-"use client";
-export const dynamic = 'force-dynamic';
-
 import { ProjectsView } from "@/components/ProjectsView";
 
 export default function DashboardPage() {
