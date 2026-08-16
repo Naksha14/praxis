@@ -1,5 +1,4 @@
-"use client";`n`nexport const dynamic = 'force-dynamic';`n`n"use client";
-import { useEffect, useState } from "react";
+"use client";`n`nexport const dynamic = 'force-dynamic';`n`n`n`n`n`nimport { useEffect, useState } from "react";
 import Link from "next/link";
 import { Wallet, IndianRupee, TrendingDown, PiggyBank, AlertTriangle } from "lucide-react";
 import { EmptyState, StatCard, fmtMoney, fmtDate, fmtPercent } from "@/components/ui";
@@ -131,5 +130,6 @@ export default function FinancePage() {
     </div>
   );
 }
+
 
 

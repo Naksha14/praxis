@@ -1,5 +1,4 @@
-"use client";`n`nexport const dynamic = 'force-dynamic';`n`n"use client";
-import { useSession } from "next-auth/react";
+"use client";`n`nexport const dynamic = 'force-dynamic';`n`n`n`n`n`nimport { useSession } from "next-auth/react";
 import { ProjectsView } from "@/components/ProjectsView";
 
 export default function ProjectsPage() {
@@ -15,5 +14,6 @@ export default function ProjectsPage() {
     </div>
   );
 }
+
 
 

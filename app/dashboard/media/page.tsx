@@ -1,5 +1,4 @@
-"use client";`n`nexport const dynamic = 'force-dynamic';`n`n"use client";
-import { useEffect, useState } from "react";
+"use client";`n`nexport const dynamic = 'force-dynamic';`n`n`n`n`n`nimport { useEffect, useState } from "react";
 import Link from "next/link";
 import { Image as ImageIcon, Film } from "lucide-react";
 import { EmptyState, Modal, useToast } from "@/components/ui";
@@ -59,5 +58,6 @@ export default function MediaPage() {
     </div>
   );
 }
+
 
 
