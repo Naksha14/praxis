@@ -2,7 +2,7 @@
 export const dynamic = 'force-dynamic';
 
 import { useEffect, useState } from "react";
-import { Users, Mail } from "lucide-react";
+import { Users, Mail, UserPlus } from "lucide-react";
 import { EmptyState } from "@/components/ui";
 
 export default function InchargesPage() {
@@ -34,7 +34,7 @@ export default function InchargesPage() {
         <p className="mt-1 text-[13.5px] text-steel">Manage project in-charges.</p>
       </div>
       {users.length === 0 ? (
-        <EmptyState title="No in-charges found" description="Add in-charges to manage projects." />
+        <EmptyState icon={Users} title="No in-charges found" subtitle="Add in-charges to manage projects." />
       ) : (
         <div className="grid grid-cols-3 gap-4">
           {users.map((user: any) => (
