@@ -1,9 +1,13 @@
-"use client";`n`nexport const dynamic = 'force-dynamic';`n`n`n`n`n`nimport { useSession } from "next-auth/react";
+"use client";
+export const dynamic = 'force-dynamic';
+
+import { useSession } from "next-auth/react";
 import { ProjectsView } from "@/components/ProjectsView";
 
 export default function ProjectsPage() {
   const { data: session } = useSession();
   const isAdmin = (session?.user as any)?.role === "ADMIN";
+
   return (
     <div>
       <div className="mb-5">
@@ -14,6 +18,3 @@ export default function ProjectsPage() {
     </div>
   );
 }
-
-
-
