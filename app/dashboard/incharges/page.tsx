@@ -1,48 +1,61 @@
-"use client";`n`nexport const dynamic = 'force-dynamic';`n`n`n`n`n`nimport { useEffect, useState } from "react";
-import { useToast } from "@/components/ui";
+"use client";
+export const dynamic = 'force-dynamic';
+
+import { useEffect, useState } from "react";
+import { Users, Mail } from "lucide-react";
+import { EmptyState } from "@/components/ui";
 
 export default function InchargesPage() {
-  const [users, setUsers] = useState<any[]>([]);
-  const [projects, setProjects] = useState<any[]>([]);
-  const toast = useToast();
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("/api/users")
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then(setUsers)
-      .catch(() => toast("Could not load the in-charge directory. Please refresh the page.", "error"));
-    fetch("/api/projects")
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then(setProjects)
-      .catch(() => {});
+      .then((res) => res.json())
+      .then((data) => {
+        setUsers(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <p>Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div>
       <div className="mb-5">
-        <h1 className="font-display text-[22px] font-bold">Project In-Charges</h1>
-        <p className="mt-1 text-[13.5px] text-steel">Everyone currently responsible for a project.</p>
+        <h1 className="font-display text-[22px] font-bold">In-Charges</h1>
+        <p className="mt-1 text-[13.5px] text-steel">Manage project in-charges.</p>
       </div>
-      <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
-        {users.map((u) => {
-          const count = projects.filter((p) => p.inChargeId === u.id).length;
-          return (
-            <div key={u.id} className="flex items-center gap-3 rounded-xl border border-line bg-white p-4.5 p-[18px]">
-              <div className="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-full bg-blueprint font-bold text-white">
-                {u.name.split(" ").map((w: string) => w[0]).slice(0, 2).join("")}
+      {users.length === 0 ? (
+        <EmptyState title="No in-charges found" description="Add in-charges to manage projects." />
+      ) : (
+        <div className="grid grid-cols-3 gap-4">
+          {users.map((user: any) => (
+            <div key={user.id} className="border rounded-lg p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                  <Users className="w-5 h-5 text-blue-500" />
+                </div>
+                <div>
+                  <p className="font-medium">{user.name}</p>
+                  <p className="text-sm text-gray-500">{user.loginId}</p>
+                </div>
               </div>
-              <div>
-                <div className="text-[14.5px] font-bold">{u.name}</div>
-                <div className="font-mono text-xs text-steel">{u.loginId}</div>
-                <div className="mt-0.5 text-xs text-steel">{count} project{count !== 1 ? "s" : ""} assigned</div>
+              <div className="mt-3 flex items-center gap-2 text-sm text-gray-500">
+                <Mail size={14} />
+                <span>{user.email || "No email"}</span>
               </div>
             </div>
-          );
-        })}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
-
-
-
