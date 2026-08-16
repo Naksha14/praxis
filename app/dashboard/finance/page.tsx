@@ -2,12 +2,24 @@
 export const dynamic = 'force-dynamic';
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { Wallet, IndianRupee, TrendingDown, PiggyBank, AlertTriangle } from "lucide-react";
-import { EmptyState, StatCard, fmtMoney, fmtDate, fmtPercent } from "@/components/ui";
+import { Wallet, TrendingDown, PiggyBank, AlertTriangle } from "lucide-react";
+import { EmptyState, StatCard, fmtMoney } from "@/components/ui";
+
+type FinanceData = {
+  totalRevenue: number;
+  totalExpenses: number;
+  netProfit: number;
+  projectCount: number;
+  projects: Array<{
+    id: string;
+    title: string;
+    revenue: number;
+    expenses: number;
+  }>;
+};
 
 export default function FinancePage() {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<FinanceData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,6 +40,14 @@ export default function FinancePage() {
     );
   }
 
+  if (!data) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <p>No data available</p>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="mb-5">
@@ -35,12 +55,12 @@ export default function FinancePage() {
         <p className="mt-1 text-[13.5px] text-steel">Financial overview across all projects.</p>
       </div>
       <div className="grid grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total Revenue" value={fmtMoney(data?.totalRevenue || 0)} icon={Wallet} />
-        <StatCard label="Total Expenses" value={fmtMoney(data?.totalExpenses || 0)} icon={TrendingDown} />
-        <StatCard label="Net Profit" value={fmtMoney(data?.netProfit || 0)} icon={PiggyBank} />
-        <StatCard label="Projects" value={data?.projectCount || 0} icon={AlertTriangle} />
+        <StatCard label="Total Revenue" value={fmtMoney(data.totalRevenue || 0)} icon={Wallet} />
+        <StatCard label="Total Expenses" value={fmtMoney(data.totalExpenses || 0)} icon={TrendingDown} />
+        <StatCard label="Net Profit" value={fmtMoney(data.netProfit || 0)} icon={PiggyBank} />
+        <StatCard label="Projects" value={data.projectCount || 0} icon={AlertTriangle} />
       </div>
-      {data?.projects?.length === 0 ? (
+      {data.projects?.length === 0 ? (
         <EmptyState icon={Wallet} title="No financial data" subtitle="Start adding revenue and expenses to projects." />
       ) : (
         <div className="border rounded-lg overflow-hidden">
@@ -54,7 +74,7 @@ export default function FinancePage() {
               </tr>
             </thead>
             <tbody>
-              {data?.projects?.map((p: any) => (
+              {data.projects?.map((p) => (
                 <tr key={p.id} className="border-t">
                   <td className="px-4 py-2">{p.title}</td>
                   <td className="px-4 py-2 text-right">{fmtMoney(p.revenue || 0)}</td>
