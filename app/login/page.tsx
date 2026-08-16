@@ -41,11 +41,11 @@ export default function LoginPage() {
             Every project,<br />one set of drawings.
           </h1>
           <p className="max-w-[400px] text-[15px] leading-relaxed text-steellight">
-            Track documents, media, revenue and site charges across every project â€” with admins and in-charges seeing exactly what they need to.
+            Track documents, media, revenue and site charges across every project Ã¢â‚¬â€ with admins and in-charges seeing exactly what they need to.
           </p>
         </div>
         <div className="flex gap-7 font-mono text-[12.5px] text-[#7C8798]">
-          <span>ROLE-BASED ACCESS</span><span>Â·</span><span>LIVE LEDGERS</span><span>Â·</span><span>SITE DOCS</span>
+          <span>ROLE-BASED ACCESS</span><span>Ã‚Â·</span><span>LIVE LEDGERS</span><span>Ã‚Â·</span><span>SITE DOCS</span>
         </div>
       </div>
 
@@ -68,7 +68,7 @@ export default function LoginPage() {
             <input
               type="password"
               className="w-full rounded-md border border-line bg-white py-2.5 pl-9 pr-3 text-sm outline-none focus:border-blueprint focus:ring-2 focus:ring-blueprint/20"
-              value={password} onChange={(e) => setPassword(e.target.value)} placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+              value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢"
               onKeyDown={(e) => e.key === "Enter" && handleLogin()} />
           </div>
 
