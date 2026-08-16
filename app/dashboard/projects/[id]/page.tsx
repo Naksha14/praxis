@@ -59,7 +59,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
   if (!project) {
     return (
       <div className="rounded-xl border border-line bg-white p-8 text-center">
-        <p className="mb-3 text-sm text-steel">This project couldn't be loaded — it may not exist, or you may not have access to it.</p>
+        <p className="mb-3 text-sm text-steel">This project couldn"'"t be loaded — it may not exist, or you may not have access to it.</p>
         <button onClick={load} className="rounded-md border border-line px-4 py-2 text-sm font-semibold hover:bg-paper">Try again</button>
       </div>
     );
@@ -118,9 +118,17 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
   async function uploadDocument(file: File, docType: string) {
     setBusy(true);
     try {
+      console.log("📄 Uploading document:", file.name, file.size, file.type);
       const urlRes = await fetch("/api/upload-url", {
         method: "POST",
-        body: JSON.stringify({ projectId: params.id, fileName: file.name, fileType: file.type, size: file.size, category: "document" }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          projectId: params.id,
+          fileName: file.name,
+          fileSize: file.size,
+          mimeType: file.type,
+          kind: "document"
+        }),
       });
       const urlBody = await urlRes.json();
       if (!urlRes.ok) { toast(urlBody.error || "Upload rejected.", "error"); return; }
@@ -130,6 +138,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
 
       const metaRes = await fetch(`/api/projects/${params.id}/documents`, {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: file.name, docType, fileKey: urlBody.fileKey, mimeType: file.type, size: file.size }),
       });
       if (!metaRes.ok) { toast("Upload succeeded but saving the record failed.", "error"); return; }
@@ -146,9 +155,17 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
   async function uploadMedia(file: File, kind: "photo" | "video") {
     setBusy(true);
     try {
+      console.log("📸 Uploading media:", file.name, file.size, file.type, kind);
       const urlRes = await fetch("/api/upload-url", {
         method: "POST",
-        body: JSON.stringify({ projectId: params.id, fileName: file.name, fileType: file.type, size: file.size, category: kind }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          projectId: params.id,
+          fileName: file.name,
+          fileSize: file.size,
+          mimeType: file.type,
+          kind: kind
+        }),
       });
       const urlBody = await urlRes.json();
       if (!urlRes.ok) { toast(urlBody.error || "Upload rejected.", "error"); return; }
@@ -158,6 +175,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
 
       const metaRes = await fetch(`/api/projects/${params.id}/media`, {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: file.name, kind, fileKey: urlBody.fileKey, mimeType: file.type, size: file.size }),
       });
       if (!metaRes.ok) { toast("Upload succeeded but saving the record failed.", "error"); return; }
