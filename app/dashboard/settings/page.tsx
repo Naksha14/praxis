@@ -3,12 +3,12 @@ export const dynamic = 'force-dynamic';
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Key } from "lucide-react";
 import { useToast } from "@/components/ui";
 
 export default function SettingsPage() {
   const { data: session } = useSession();
-  const { toast } = useToast();
+  const toast = useToast();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -45,7 +45,9 @@ export default function SettingsPage() {
         <p className="mt-1 text-[13.5px] text-steel">Manage your account settings.</p>
       </div>
       <div className="max-w-md">
-        <h2 className="text-lg font-semibold mb-4">Change Password</h2>
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <Key size={18} /> Change Password
+        </h2>
         <form onSubmit={handleChangePassword} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
