@@ -6,6 +6,8 @@ const nextConfig = {
   },
   // Disable static generation for all pages
   staticPageGenerationTimeout: 0,
+  // Force all pages to be dynamic
+  generateStaticParams: false,
 };
 
 export default nextConfig;
