@@ -2,9 +2,8 @@
 export const dynamic = 'force-dynamic';
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { Image as ImageIcon, Film } from "lucide-react";
-import { EmptyState, Modal, useToast } from "@/components/ui";
+import { Image as ImageIcon, Film, Upload } from "lucide-react";
+import { EmptyState } from "@/components/ui";
 
 export default function MediaPage() {
   const [media, setMedia] = useState([]);
@@ -35,7 +34,7 @@ export default function MediaPage() {
         <p className="mt-1 text-[13.5px] text-steel">Photos and videos across all projects.</p>
       </div>
       {media.length === 0 ? (
-        <EmptyState title="No media found" description="Upload photos and videos from project pages." />
+        <EmptyState icon={Upload} title="No media found" subtitle="Upload photos and videos from project pages." />
       ) : (
         <div className="grid grid-cols-3 gap-4">
           {media.map((item: any) => (
