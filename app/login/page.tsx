@@ -1,4 +1,7 @@
-"use client";`n`nexport const dynamic = 'force-dynamic';`n`n`n`n`n`nimport { useState } from "react";
+"use client";
+export const dynamic = 'force-dynamic';
+
+import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { HardHat, User, Lock, Loader2, AlertCircle } from "lucide-react";
@@ -85,6 +88,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-
-
