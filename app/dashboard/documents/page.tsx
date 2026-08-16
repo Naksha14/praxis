@@ -4,12 +4,11 @@ export const dynamic = 'force-dynamic';
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FileText, Eye, Download } from "lucide-react";
-import { EmptyState, fmtDate, fmtBytes, Modal, useToast } from "@/components/ui";
+import { EmptyState, fmtDate, fmtBytes } from "@/components/ui";
 
 export default function DocumentsPage() {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const toast = useToast();
 
   useEffect(() => {
     fetch("/api/documents")
@@ -36,7 +35,7 @@ export default function DocumentsPage() {
         <p className="mt-1 text-[13.5px] text-steel">All documents across all projects.</p>
       </div>
       {documents.length === 0 ? (
-        <EmptyState title="No documents found" description="Upload documents from project pages." />
+        <EmptyState title="No documents found" />
       ) : (
         <div className="grid grid-cols-1 gap-4">
           {documents.map((doc: any) => (
