@@ -44,7 +44,7 @@ export default function DocumentsPage() {
                 <FileText className="w-6 h-6 text-blue-500" />
                 <div>
                   <p className="font-medium">{doc.name}</p>
-                  <p className="text-sm text-gray-500">{fmtDate(doc.createdAt)} • {fmtBytes(doc.size)}</p>
+                  <p className="text-sm text-gray-500">{fmtDate(doc.createdAt)} â€¢ {fmtBytes(doc.size)}</p>
                 </div>
               </div>
               <div className="flex gap-2">
