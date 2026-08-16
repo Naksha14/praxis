@@ -9,7 +9,7 @@ import { EmptyState, fmtDate, fmtBytes, Modal, useToast } from "@/components/ui"
 export default function DocumentsPage() {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { toast } = useToast();
+  const toast = useToast();
 
   useEffect(() => {
     fetch("/api/documents")
