@@ -35,13 +35,13 @@ export default function FinancePage() {
         <p className="mt-1 text-[13.5px] text-steel">Financial overview across all projects.</p>
       </div>
       <div className="grid grid-cols-4 gap-4 mb-6">
-        <StatCard title="Total Revenue" value={fmtMoney(data?.totalRevenue || 0)} icon={Wallet} />
-        <StatCard title="Total Expenses" value={fmtMoney(data?.totalExpenses || 0)} icon={TrendingDown} />
-        <StatCard title="Net Profit" value={fmtMoney(data?.netProfit || 0)} icon={PiggyBank} />
-        <StatCard title="Projects" value={data?.projectCount || 0} icon={AlertTriangle} />
+        <StatCard label="Total Revenue" value={fmtMoney(data?.totalRevenue || 0)} icon={Wallet} />
+        <StatCard label="Total Expenses" value={fmtMoney(data?.totalExpenses || 0)} icon={TrendingDown} />
+        <StatCard label="Net Profit" value={fmtMoney(data?.netProfit || 0)} icon={PiggyBank} />
+        <StatCard label="Projects" value={data?.projectCount || 0} icon={AlertTriangle} />
       </div>
       {data?.projects?.length === 0 ? (
-        <EmptyState title="No financial data" description="Start adding revenue and expenses to projects." />
+        <EmptyState icon={Wallet} title="No financial data" subtitle="Start adding revenue and expenses to projects." />
       ) : (
         <div className="border rounded-lg overflow-hidden">
           <table className="w-full">
