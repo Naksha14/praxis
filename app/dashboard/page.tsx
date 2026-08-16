@@ -1,5 +1,7 @@
 export const dynamic = 'force-dynamic';
 
+export const dynamic = 'force-dynamic';
+
 import { ProjectsView } from "@/components/ProjectsView";
 
 export default function DashboardPage() {
@@ -13,4 +15,5 @@ export default function DashboardPage() {
     </div>
   );
 }
+
 

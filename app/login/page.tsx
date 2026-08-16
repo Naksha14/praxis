@@ -1,6 +1,4 @@
-export const dynamic = 'force-dynamic';
-
-"use client";
+"use client";`n`nexport const dynamic = 'force-dynamic';`n`n"use client";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -88,4 +86,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
 

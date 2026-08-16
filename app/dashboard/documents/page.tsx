@@ -1,6 +1,4 @@
-export const dynamic = 'force-dynamic';
-
-"use client";
+"use client";`n`nexport const dynamic = 'force-dynamic';`n`n"use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FileText, Eye, Download } from "lucide-react";
@@ -79,4 +77,5 @@ export default function DocumentsPage() {
     </div>
   );
 }
+
 

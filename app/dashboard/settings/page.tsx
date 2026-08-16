@@ -1,6 +1,4 @@
-export const dynamic = 'force-dynamic';
-
-"use client";
+"use client";`n`nexport const dynamic = 'force-dynamic';`n`n"use client";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { Loader2 } from "lucide-react";
@@ -64,4 +62,5 @@ export default function SettingsPage() {
     </div>
   );
 }
+
 
