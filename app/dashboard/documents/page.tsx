@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic';
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { FileText, Eye, Download } from "lucide-react";
+import { FileText, Eye, Download, Files } from "lucide-react";
 import { EmptyState, fmtDate, fmtBytes } from "@/components/ui";
 
 export default function DocumentsPage() {
@@ -35,7 +35,7 @@ export default function DocumentsPage() {
         <p className="mt-1 text-[13.5px] text-steel">All documents across all projects.</p>
       </div>
       {documents.length === 0 ? (
-        <EmptyState title="No documents found" />
+        <EmptyState icon={Files} title="No documents found" subtitle="Upload documents from project pages." />
       ) : (
         <div className="grid grid-cols-1 gap-4">
           {documents.map((doc: any) => (
