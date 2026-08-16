@@ -3,7 +3,7 @@ import { randomUUID } from "crypto";
 
 export function buildFileKey(projectId: string, fileName: string) {
   const safeName = fileName.replace(/[^a-zA-Z0-9._-]/g, "_");
-  return projects//-;
+  return `projects/${projectId}/${randomUUID()}-${safeName}`;
 }
 
 export async function getUploadUrl(key: string) {
