@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSessionUser, isAdmin } from "@/lib/permissions";
@@ -52,3 +54,4 @@ export async function GET() {
     summary: { totalAmountPaid, totalExpenses, totalRemaining, totalExtraCost, totalSavings },
   });
 }
+

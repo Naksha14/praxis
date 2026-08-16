@@ -1,14 +1,37 @@
 import { createClient } from "@supabase/supabase-js";
 import { randomUUID } from "crypto";
 
-// Server-only admin client using the service_role key
+// Get environment variables with fallbacks
+const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const bucketName = process.env.SUPABASE_STORAGE_BUCKET || process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET;
+
+// Log the values (this will show in build logs)
+console.log('🔍 Storage config:', {
+  supabaseUrl: supabaseUrl ? '✅ set' : '❌ MISSING',
+  supabaseKey: supabaseKey ? '✅ set' : '❌ MISSING',
+  bucketName: bucketName ? '✅ set' : '❌ MISSING',
+});
+
+// Throw clear error if missing
+if (!supabaseUrl) {
+  throw new Error('❌ supabaseUrl is required! Check SUPABASE_URL or NEXT_PUBLIC_SUPABASE_URL env vars');
+}
+if (!supabaseKey) {
+  throw new Error('❌ SUPABASE_SERVICE_ROLE_KEY is required!');
+}
+if (!bucketName) {
+  throw new Error('❌ SUPABASE_STORAGE_BUCKET is required!');
+}
+
+// Server-only admin client
 const supabaseAdmin = createClient(
-  process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-  process.env.SUPABASE_SERVICE_ROLE_KEY || "",
+  supabaseUrl,
+  supabaseKey,
   { auth: { persistSession: false } }
 );
 
-const BUCKET = process.env.SUPABASE_STORAGE_BUCKET || process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET || "";
+const BUCKET = bucketName;
 
 export function buildFileKey(projectId: string, fileName: string) {
   const safeName = fileName.replace(/[^a-zA-Z0-9._-]/g, "_");

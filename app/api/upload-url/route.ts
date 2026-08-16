@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionUser, canAccessProject } from "@/lib/permissions";
 import { buildFileKey, getUploadUrl } from "@/lib/storage";
@@ -45,3 +47,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: e?.message || "Could not prepare the upload. Check your Supabase Storage configuration." }, { status: 500 });
   }
 }
+
