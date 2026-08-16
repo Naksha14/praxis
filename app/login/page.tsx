@@ -57,7 +57,7 @@ export default function LoginPage() {
             <User size={15} className="absolute left-3 top-3.5 text-steellight" />
             <input
               className="w-full rounded-md border border-line bg-white py-2.5 pl-9 pr-3 text-sm outline-none focus:border-blueprint focus:ring-2 focus:ring-blueprint/20"
-              value={loginId} onChange={(e) => setLoginId(e.target.value)} placeholder="e.g. Praxis2026"
+              value={loginId} onChange={(e) => setLoginId(e.target.value)} placeholder="e.g. user ID"
               onKeyDown={(e) => e.key === "Enter" && handleLogin()} />
           </div>
           <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-steel">Password</label>
@@ -81,14 +81,9 @@ export default function LoginPage() {
             onClick={handleLogin} disabled={busy}>
             {busy && <Loader2 size={16} className="animate-spin" />} Sign in
           </button>
-
-          <div className="mt-6 rounded-md bg-paper p-3.5 text-[12.5px] leading-relaxed text-steel">
-            <div className="mb-1 font-semibold text-ink">Demo credentials (change after first login)</div>
-            <div className="font-mono">Admin — Praxis2026 / Praxis@482</div>
-            <div className="font-mono">In-Charge — Praxis123 / Praxis@2026</div>
-          </div>
         </div>
       </div>
     </div>
   );
 }
+
