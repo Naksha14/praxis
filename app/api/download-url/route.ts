@@ -3,6 +3,9 @@ import { prisma } from "@/lib/prisma";
 import { getSessionUser, canAccessProject } from "@/lib/permissions";
 import { getDownloadUrl } from "@/lib/storage";
 
+// Force dynamic rendering - prevents build-time prerendering
+export const dynamic = 'force-dynamic';
+
 // GET /api/download-url?kind=document|media&id=...
 // Verifies the caller has access to the parent project before ever
 // minting a signed URL, so a guessed file id can't be used to exfiltrate
